@@ -1,0 +1,103 @@
+.idea/
+*.iml
+
+### JBoss template
+jboss/server/all/deploy/project.ext
+jboss/server/default/deploy/project.ext
+jboss/server/minimal/deploy/project.ext
+jboss/server/all/log/*.log
+jboss/server/all/tmp/**/*
+jboss/server/all/data/**/*
+jboss/server/all/work/**/*
+jboss/server/default/log/*.log
+jboss/server/default/tmp/**/*
+jboss/server/default/data/**/*
+jboss/server/default/work/**/*
+jboss/server/minimal/log/*.log
+jboss/server/minimal/tmp/**/*
+jboss/server/minimal/data/**/*
+jboss/server/minimal/work/**/*
+
+# deployed package files #
+
+*.DEPLOYED
+
+### Maven template
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+### Java template
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+### JBoss4 template
+# gitignore for JBoss v4 projects
+
+/server/all/data
+/server/all/log
+/server/all/tmp
+/server/all/work
+/server/default/data
+/server/default/log
+/server/default/tmp
+/server/default/work
+/server/minimal/data
+/server/minimal/log
+/server/minimal/tmp
+/server/minimal/work
+
+# Note:
+# there may be other directories that contain *.xml.failed or *.war.failed files
+/server/default/deploy/*.xml.failed
+/server/default/deploy/*.war.failed
+
+### JBoss6 template
+# gitignore for JBoss v6 projects
+#
+# Note: to ensure empty directories remain part of the repository, like
+# `/server/minimal/lib`, you should add an empty `.gitignore` or `.gitkeep` file
+# to the directory - otherwise you may have issues when starting the service.
+
+/server/jbossweb-standalone/data
+/server/jbossweb-standalone/log
+/server/jbossweb-standalone/tmp
+/server/jbossweb-standalone/work
+/server/standard/data
+/server/standard/log
+/server/standard/tmp
+/server/standard/work
+/server/default/deploy/*.jar.failed
+/server/default/deploy/*.jar.dodeploy
+/server/default/deploy/*.xml.dodeploy
+/server/default/deploy/*.war.dodeploy
+
+
