@@ -12,16 +12,19 @@ import java.io.IOException;
 public class ErrorServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String error;
         switch ((Integer) req.getAttribute("javax.servlet.error.status_code")){
             case 404:
-                resp.getWriter().println("<h1>Страница не найдена!</h1>");
+                error = "Страница не найдена!";
                 break;
             case 403:
-                resp.getWriter().println("<h1>Доступ запрещен!</h1>");
+                error = "Доступ запрещен!";
                 break;
             default:
-                resp.getWriter().println("<h1>Неизвестная ошибка!</h1>");
+                error = "Неизвестная ошибка!";
         }
-        getServletContext().getRequestDispatcher("/menu").include(req, resp);
+        req.setAttribute("title", "Error");
+        req.setAttribute("error", error);
+        req.getRequestDispatcher("WEB-INF/views/error.jsp").forward(req, resp);
     }
 }
