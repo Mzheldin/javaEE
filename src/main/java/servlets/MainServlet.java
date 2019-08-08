@@ -11,7 +11,7 @@ import java.io.IOException;
 public class MainServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.getWriter().println("<h1>Главная страница</h1>");
-        getServletContext().getRequestDispatcher("/menu").include(req, resp);
+        req.setAttribute("title", "Main page");
+        req.getRequestDispatcher("WEB-INF/views/main.jsp").forward(req, resp);
     }
 }
