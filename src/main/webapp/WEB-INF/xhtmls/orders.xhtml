@@ -1,0 +1,43 @@
+<html xmlns= "http://www.w3.org/1999/xhtml"
+      xmlns:h= "http://java.sun.com/jsf/html"
+      xmlns:f= "http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:include src="fragments/header.xhtml">
+    <ui:param name="title" value="Orders"/>
+</ui:include>
+<ui:include src="fragments/menu.xhtml"/>
+
+<h:body>
+    <div class="container">
+        <h:form>
+            <h:commandButton value="Edit" action="#{orderBean.createOrder}" styleClass="mt-1 mb-1"/>
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Products</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <ui:repeat value="#{orderBean.allOrders}" var="order">
+                    <tr>
+                        <td>
+                            <h:outputText value="#{order.id}"/>
+                        </td>
+                        <td>
+                            <h:outputText value="#{order.products}"/>
+                        </td>
+                        <td>
+                            <h:commandButton value="Edit" action="#{orderBean.editOrder(order)}" styleClass="mr-1"/>
+                            <h:commandButton value="Delete" action="#{orderBean.deleteOrder(order)}" styleClass="mr-1"/>
+                        </td>
+                    </tr>
+                </ui:repeat>
+            </table>
+        </h:form>
+    </div>
+</h:body>
+
+<ui:include src="fragments/footer.xhtml"/>
+</html>

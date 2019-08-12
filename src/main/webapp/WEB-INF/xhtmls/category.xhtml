@@ -1,0 +1,25 @@
+<html xmlns= "http://www.w3.org/1999/xhtml"
+      xmlns:h= "http://java.sun.com/jsf/html"
+      xmlns:f= "http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:include src="fragments/header.xhtml">
+    <ui:param name="title" value="Category"/>
+</ui:include>
+<ui:include src="fragments/menu.xhtml"/>
+
+<h:body>
+    <div class="container">
+        <h:form id="categoryForm">
+            <div class="form-group">
+                <h:outputLabel value="Category name" for="exampleInputCategoryname"/>
+                <h:inputText styleclass="form-control" id="exampleInputCategoryname" placeholder="Enter category name"
+                             value="#{categoryBean.category.name}"/>
+            </div>
+            <h:commandButton value="Submit" styleClass="btn btn-primary" action="#{categoryBean.saveCategory}" />
+        </h:form>
+    </div>
+</h:body>
+
+<ui:include src="fragments/footer.xhtml"/>
+</html>

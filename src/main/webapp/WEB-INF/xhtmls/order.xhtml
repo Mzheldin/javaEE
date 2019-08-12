@@ -1,0 +1,25 @@
+<html xmlns= "http://www.w3.org/1999/xhtml"
+      xmlns:h= "http://java.sun.com/jsf/html"
+      xmlns:f= "http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:include src="fragments/header.xhtml">
+    <ui:param name="title" value="Order"/>
+</ui:include>
+<ui:include src="fragments/menu.xhtml"/>
+
+<h:body>
+    <div class="container">
+        <h:form id="orderForm">
+            <div class="form-group">
+                <h:outputLabel value="Products" for="exampleInputProducts"/>
+                <h:inputText styleclass="form-control" id="exampleInputProducts" placeholder="Enter products"
+                             value="#{orderBean.order.products}"/>
+            </div>
+            <h:commandButton value="Submit" styleClass="btn btn-primary" action="#{orderBean.saveOrder}" />
+        </h:form>
+    </div>
+</h:body>
+
+<ui:include src="fragments/footer.xhtml"/>
+</html>

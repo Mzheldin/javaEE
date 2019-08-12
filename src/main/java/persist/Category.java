@@ -1,18 +1,16 @@
 package persist;
 
-public class Product {
+public class Category {
 
     private int id;
     private String name;
-    private String description;
 
-    public Product(int id, String name, String description) {
+    public Category(int id, String name) {
         this.id = id;
         this.name = name;
-        this.description = description;
     }
 
-    public Product() {
+    public Category() {
     }
 
     public int getId() {
@@ -29,13 +27,5 @@ public class Product {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }
