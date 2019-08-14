@@ -4,19 +4,26 @@ import persist.Product;
 import persist.ProductRepository;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.ServletContext;
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
 
 @SessionScoped
-@ManagedBean
-public class ProductBean {
+@Named
+public class ProductBean implements Serializable {
 
+    @Inject
     private ProductRepository productRepository;
     private Product product;
+
+    public ProductBean() {
+    }
 
     @PostConstruct
     public void init(){
@@ -38,9 +45,8 @@ public class ProductBean {
         return "/product.xhtml?faces-redirect=true";
     }
 
-    public String deleteProduct(Product product) throws SQLException{
+    public void deleteProduct(Product product) throws SQLException{
         productRepository.deleteProduct(product);
-        return "/products.xhtml?faces-redirect=true";
     }
 
     public String saveProduct() throws SQLException {

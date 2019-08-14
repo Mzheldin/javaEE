@@ -12,9 +12,10 @@
     <div class="container">
         <h:form id="categoryForm">
             <div class="form-group">
-                <h:outputLabel value="Category name" for="exampleInputCategoryname"/>
-                <h:inputText styleclass="form-control" id="exampleInputCategoryname" placeholder="Enter category name"
-                             value="#{categoryBean.category.name}"/>
+                <h:outputLabel value="Category name" for="nputCategoryName"/>
+                <h:inputText styleclass="form-control" id="nputCategoryName" placeholder="Enter category name"
+                             value="#{categoryBean.category.name}" required="true" requiredMessage="Category name required!"/>
+                <h:message for="nputCategoryName" style="color: red"/>
             </div>
             <h:commandButton value="Submit" styleClass="btn btn-primary" action="#{categoryBean.saveCategory}" />
         </h:form>

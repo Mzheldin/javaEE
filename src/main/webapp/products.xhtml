@@ -6,11 +6,11 @@
 <ui:include src="fragments/header.xhtml">
     <ui:param name="title" value="Products"/>
 </ui:include>
-<ui:include src="fragments/menu.xhtml"/>
 
 <h:body>
+    <ui:include src="fragments/menu.xhtml"/>
     <div class="container">
-        <h:form>
+        <h:form id="productForm">
             <h:commandButton value="Edit" action="#{productBean.createProduct()}" styleClass="mt-1 mb-1"/>
             <h:dataTable value="#{productBean.allProducts}" var="product">
                 <h:column>
@@ -28,7 +28,9 @@
                 <h:column>
                     <f:facet name="header">Action</f:facet>
                     <h:commandButton value="Edit" action="#{productBean.editProduct(product)}" styleClass="mr-1"/>
-                    <h:commandButton value="Delete" action="#{productBean.deleteProduct(product)}" styleClass="mr-1"/>
+                    <h:commandButton value="Delete" action="#{productBean.deleteProduct(product)}" styleClass="mr-1">
+                        <f:ajax render="productForm"/>
+                    </h:commandButton>
                 </h:column>
             </h:dataTable>
 <!--            <table class="table">-->
@@ -60,7 +62,7 @@
 <!--            </table>-->
         </h:form>
     </div>
+    <ui:include src="fragments/footer.xhtml"/>
 </h:body>
 
-<ui:include src="fragments/footer.xhtml"/>
 </html>

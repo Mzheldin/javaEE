@@ -4,19 +4,26 @@ import persist.Category;
 import persist.CategoryRepository;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.ServletContext;
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
 
 @SessionScoped
-@ManagedBean
-public class CategoryBean {
+@Named
+public class CategoryBean implements Serializable {
 
+    @Inject
     private CategoryRepository categoryRepository;
     private Category category;
+
+    public CategoryBean() {
+    }
 
     @PostConstruct
     public void init(){
@@ -38,9 +45,8 @@ public class CategoryBean {
         return "/category.xhtml?faces-redirect=true";
     }
 
-    public String deleteCategory(Category category) throws SQLException{
+    public void deleteCategory(Category category) throws SQLException{
         categoryRepository.deleteCategory(category);
-        return "/categories.xhtml?faces-redirect=true";
     }
 
     public String saveCategory() throws SQLException {

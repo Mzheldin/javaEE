@@ -12,14 +12,15 @@
     <div class="container">
         <h:form id="productForm">
             <div class="form-group">
-                <h:outputLabel value="Product name" for="exampleInputProductname"/>
-                <h:inputText styleclass="form-control" id="exampleInputProductname" placeholder="Enter product name"
-                        value="#{productBean.product.name}"/>
+                <h:outputLabel value="Product name" for="inputProductname"/>
+                <h:inputText styleclass="form-control" id="inputProductname" placeholder="Enter product name"
+                             value="#{productBean.product.name}" required="true" requiredMessage="Product name required!"/>
+                <h:message for="inputProductname" style="color: red"/>
             </div>
             <div class="form-group">
-                <h:outputLabel  value="Description" for="exampleInputDescription"/>
-                <h:inputText styleClass="form-control" id="exampleInputDescription" placeholder="Description"
-                        value="#{productBean.product.description}"/>
+                <h:outputLabel  value="Description" for="inputDescription"/>
+                <h:inputText styleClass="form-control" id="inputDescription" placeholder="Description"
+                             value="#{productBean.product.description}"/>
             </div>
             <h:commandButton value="Submit" styleClass="btn btn-primary" action="#{productBean.saveProduct}" />
         </h:form>

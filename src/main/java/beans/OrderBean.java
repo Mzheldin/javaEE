@@ -4,19 +4,26 @@ import persist.Order;
 import persist.OrderRepository;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.ServletContext;
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
 
 @SessionScoped
-@ManagedBean
-public class OrderBean {
+@Named
+public class OrderBean implements Serializable {
 
+    @Inject
     private OrderRepository orderRepository;
     private Order order;
+
+    public OrderBean() {
+    }
 
     @PostConstruct
     public void init(){
@@ -38,9 +45,8 @@ public class OrderBean {
         return "/order.xhtml?faces-redirect=true";
     }
 
-    public String deleteOrder(Order order) throws SQLException{
+    public void deleteOrder(Order order) throws SQLException{
         orderRepository.deleteOrder(order);
-        return "/orders.xhtml?faces-redirect=true";
     }
 
     public String saveOrder() throws SQLException {

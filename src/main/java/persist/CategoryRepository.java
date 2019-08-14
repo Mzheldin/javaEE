@@ -1,12 +1,31 @@
 package persist;
 
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+import javax.servlet.ServletContext;
+import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryRepository {
+@Named
+@ApplicationScoped
+public class CategoryRepository implements Serializable{
 
-    private final Connection connection;
+    @Inject
+    private ServletContext servletContext;
+    private Connection connection;
+
+    @PostConstruct
+    private void init(){
+        this.connection = (Connection) servletContext.getAttribute("db_connection");
+    }
+
+    public CategoryRepository() {
+    }
 
     public CategoryRepository(Connection connection) throws SQLException {
         this.connection = connection;
