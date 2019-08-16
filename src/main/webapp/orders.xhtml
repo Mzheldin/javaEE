@@ -1,0 +1,62 @@
+<html xmlns= "http://www.w3.org/1999/xhtml"
+      xmlns:h= "http://java.sun.com/jsf/html"
+      xmlns:f= "http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:include src="fragments/header.xhtml">
+    <ui:param name="title" value="Orders"/>
+</ui:include>
+<ui:include src="fragments/menu.xhtml"/>
+
+<h:body>
+    <div class="container">
+        <h:form id="orderForm">
+            <h:commandButton value="Edit" action="#{orderBean.createOrder}" styleClass="mt-1 mb-1"/>
+            <h:dataTable value="#{orderBean.allOrders}" var="order">
+                <h:column>
+                    <f:facet name="header">Id</f:facet>
+                    #{order.id}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Products</f:facet>
+                    #{order.products}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Action</f:facet>
+                    <h:commandButton value="Edit" action="#{orderBean.editOrder(product)}" styleClass="mr-1"/>
+                    <h:commandButton value="Delete" action="#{orderBean.deleteOrder(product)}" styleClass="mr-1">
+                        <f:ajax render="orderForm"/>
+                    </h:commandButton>
+                </h:column>
+            </h:dataTable>
+<!--            <table class="table">-->
+<!--                <thead class="thead-dark">-->
+<!--                <tr>-->
+<!--                    <th>Id</th>-->
+<!--                    <th>Products</th>-->
+<!--                    <th>Actions</th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <ui:repeat value="#{orderBean.allOrders}" var="order">-->
+<!--                    <tr>-->
+<!--                        <td>-->
+<!--                            <h:outputText value="#{order.id}"/>-->
+<!--                        </td>-->
+<!--                        <td>-->
+<!--                            <h:outputText value="#{order.products}"/>-->
+<!--                        </td>-->
+<!--                        <td>-->
+<!--                            <h:commandButton value="Edit" action="#{orderBean.editOrder(order)}" styleClass="mr-1"/>-->
+<!--                            <h:commandButton value="Delete" action="#{orderBean.deleteOrder(order)}" styleClass="mr-1">-->
+<!--                                <f:ajax render="ordersForm"/>-->
+<!--                            </h:commandButton>-->
+<!--                        </td>-->
+<!--                    </tr>-->
+<!--                </ui:repeat>-->
+<!--            </table>-->
+        </h:form>
+    </div>
+</h:body>
+
+<ui:include src="fragments/footer.xhtml"/>
+</html>

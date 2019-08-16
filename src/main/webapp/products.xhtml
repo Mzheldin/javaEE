@@ -1,0 +1,68 @@
+<html xmlns= "http://www.w3.org/1999/xhtml"
+      xmlns:h= "http://java.sun.com/jsf/html"
+      xmlns:f= "http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:include src="fragments/header.xhtml">
+    <ui:param name="title" value="Products"/>
+</ui:include>
+
+<h:body>
+    <ui:include src="fragments/menu.xhtml"/>
+    <div class="container">
+        <h:form id="productForm">
+            <h:commandButton value="Edit" action="#{productBean.createProduct()}" styleClass="mt-1 mb-1"/>
+            <h:dataTable value="#{productBean.allProducts}" var="product">
+                <h:column>
+                    <f:facet name="header">Id</f:facet>
+                    #{product.id}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Name</f:facet>
+                    #{product.name}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Description</f:facet>
+                    #{product.description}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Action</f:facet>
+                    <h:commandButton value="Edit" action="#{productBean.editProduct(product)}" styleClass="mr-1"/>
+                    <h:commandButton value="Delete" action="#{productBean.deleteProduct(product)}" styleClass="mr-1">
+                        <f:ajax render="productForm"/>
+                    </h:commandButton>
+                </h:column>
+            </h:dataTable>
+<!--            <table class="table">-->
+<!--                <thead class="thead-dark">-->
+<!--                    <tr>-->
+<!--                        <th>Id</th>-->
+<!--                        <th>Name</th>-->
+<!--                        <th>Description</th>-->
+<!--                        <th>Actions</th>-->
+<!--                    </tr>-->
+<!--                </thead>-->
+<!--                <ui:repeat value="#{productBean.allProducts}" var="product">-->
+<!--                    <tr>-->
+<!--                        <td>-->
+<!--                            <h:outputText value="#{product.id}"/>-->
+<!--                        </td>-->
+<!--                        <td>-->
+<!--                            <h:outputText value="#{product.name}"/>-->
+<!--                        </td>-->
+<!--                        <td>-->
+<!--                            <h:outputText value="#{product.description}"/>-->
+<!--                        </td>-->
+<!--                        <td>-->
+<!--                            <h:commandButton value="Edit" action="#{productBean.editProduct(product)}" styleClass="mr-1"/>-->
+<!--                            <h:commandButton value="Delete" action="#{productBean.deleteProduct(product)}" styleClass="mr-1"/>-->
+<!--                        </td>-->
+<!--                    </tr>-->
+<!--                </ui:repeat>-->
+<!--            </table>-->
+        </h:form>
+    </div>
+    <ui:include src="fragments/footer.xhtml"/>
+</h:body>
+
+</html>

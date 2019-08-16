@@ -1,0 +1,62 @@
+<html xmlns= "http://www.w3.org/1999/xhtml"
+      xmlns:h= "http://java.sun.com/jsf/html"
+      xmlns:f= "http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:include src="fragments/header.xhtml">
+    <ui:param name="title" value="Categories"/>
+</ui:include>
+<ui:include src="fragments/menu.xhtml"/>
+
+<h:body>
+    <div class="container">
+        <h:form id="categoryForm">
+            <h:commandButton value="Edit" action="#{categoryBean.createCategory()}" styleClass="mt-1 mb-1"/>
+            <h:dataTable value="#{categoryBean.allCategories}" var="category">
+                <h:column>
+                    <f:facet name="header">Id</f:facet>
+                    #{category.id}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Name</f:facet>
+                    #{category.name}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Action</f:facet>
+                    <h:commandButton value="Edit" action="#{categoryBean.editCategory(category)}" styleClass="mr-1"/>
+                    <h:commandButton value="Delete" action="#{categoryBean.deleteCategory(category)}" styleClass="mr-1">
+                        <f:ajax render="categoryForm"/>
+                    </h:commandButton>
+                </h:column>
+            </h:dataTable>
+<!--            <table class="table">-->
+<!--                <thead class="thead-dark">-->
+<!--                <tr>-->
+<!--                    <th>Id</th>-->
+<!--                    <th>Name</th>-->
+<!--                    <th>Actions</th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <ui:repeat value="#{categoryBean.allCategories}" var="category">-->
+<!--                    <tr>-->
+<!--                        <td>-->
+<!--                            <h:outputText value="#{category.id}"/>-->
+<!--                        </td>-->
+<!--                        <td>-->
+<!--                            <h:outputText value="#{category.name}"/>-->
+<!--                        </td>-->
+<!--                        <td>-->
+<!--                            <h:commandButton value="Edit" action="#{categoryBean.editCategory(category)}" styleClass="mr-1"/>-->
+<!--                            <h:commandButton value="Delete" action="#{categoryBean.deleteCategory(category)}" styleClass="mr-1">-->
+<!--                                <f:ajax render="categoryForm"/>-->
+<!--                            </h:commandButton>-->
+<!--                        </td>-->
+<!--                    </tr>-->
+<!--                </ui:repeat>-->
+<!--            </table>-->
+        </h:form>
+    </div>
+</h:body>
+
+<ui:include src="fragments/footer.xhtml"/>
+</html>

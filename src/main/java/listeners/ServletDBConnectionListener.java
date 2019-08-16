@@ -2,8 +2,7 @@ package listeners;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import persist.Product;
-import persist.ProductRepository;
+import persist.*;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -30,11 +29,9 @@ public class ServletDBConnectionListener implements ServletContextListener {
             if (connection != null)
                 sce.getServletContext().setAttribute("db_connection", connection);
             logger.info("Connection ", connection == null);
-            ProductRepository productRepository = new ProductRepository(connection);
-            sce.getServletContext().setAttribute("productRepository", productRepository);
-            if (productRepository.getAllProducts().size() == 0)
-                for (int i = 1; i <= 9; i++)
-                    productRepository.insert(new Product(-1, "product#" + i, "product#" + i + " description"));
+            initProductRepository(sce);
+            initCategoryRepository(sce);
+            initOrderRepository(sce);
         } catch (Exception e){
             e.printStackTrace();
             closeConnection();
@@ -44,6 +41,42 @@ public class ServletDBConnectionListener implements ServletContextListener {
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         closeConnection();
+    }
+
+    private void initProductRepository(ServletContextEvent sce){
+        try {
+            ProductRepository productRepository = new ProductRepository(connection);
+            sce.getServletContext().setAttribute("productRepository", productRepository);
+            if (productRepository.getAllProducts().size() == 0)
+                for (int i = 1; i <= 9; i++)
+                    productRepository.insert(new Product(-1, "product#" + i, "product#" + i + " description"));
+        } catch (SQLException e){
+            e.printStackTrace();
+            closeConnection();
+        }
+    }
+
+    private void initCategoryRepository(ServletContextEvent sce){
+        try {
+            CategoryRepository categoryRepository = new CategoryRepository(connection);
+            sce.getServletContext().setAttribute("categoryRepository", categoryRepository);
+            if (categoryRepository.getAllCategories().size() == 0)
+                for (int i = 1; i <= 3; i++)
+                    categoryRepository.insert(new Category(-1, "category#" + i));
+        } catch (SQLException e){
+            e.printStackTrace();
+            closeConnection();
+        }
+    }
+
+    private void initOrderRepository(ServletContextEvent sce){
+        try {
+            OrderRepository orderRepository = new OrderRepository(connection);
+            sce.getServletContext().setAttribute("orderRepository", orderRepository);
+        } catch (SQLException e){
+            e.printStackTrace();
+            closeConnection();
+        }
     }
 
     private void closeConnection(){
