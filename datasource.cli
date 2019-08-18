@@ -1,0 +1,18 @@
+module add \
+    --name=com.mysql.driver \
+    --dependencies=javax.api,javax.transaction.api \
+    --resources=D:\Some_jar_and_other\mysql-connector-java-5.1.48\mysql-connector-java-5.1.48\mysql-connector-java-5.1.48-bin.jar
+
+/subsystem=datasources/jdbc-driver=mysql:add( driver-name=mysql, driver-module-name=com.mysql.driver, driver-class-name=com.mysql.jdbc.Driver )
+
+data-source add \
+    --jndi-name=java:/jboss/datasources/MySQLDS \
+    --name=MySQLDS \
+    --connection-url=jdbc:mysql://localhost:3306/javaee_test_db?createDatabaseIfNotExist=true \
+    --driver-name=mysql \
+    --user-name=root \
+    --password=1488
+
+:reload
+
+# jboss-cli.bat --connect --file=\IdeaProjects\geekbrains_jee\firstwildflyjee\datasource.cli

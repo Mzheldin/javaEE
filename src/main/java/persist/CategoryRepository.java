@@ -1,94 +1,54 @@
 package persist;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
-import javax.servlet.ServletContext;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.io.Serializable;
-import java.sql.*;
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 @Named
 @ApplicationScoped
-public class CategoryRepository implements Serializable{
+public class CategoryRepository {
 
-    @Inject
-    private ServletContext servletContext;
-    private Connection connection;
-
-    @PostConstruct
-    private void init(){
-        this.connection = (Connection) servletContext.getAttribute("db_connection");
-    }
+    @PersistenceContext(unitName = "ds")
+    protected EntityManager entityManager;
 
     public CategoryRepository() {
     }
 
-    public CategoryRepository(Connection connection) throws SQLException {
-        this.connection = connection;
-        createTableIfNotExists(connection);
+    @Transactional
+    public Category merge(Category category){
+        return entityManager.merge(category);
     }
 
-    public void insert(Category category) throws SQLException {
-        try (PreparedStatement stmt = connection.prepareStatement(
-                "insert into categories(name) values (?);")) {
-            stmt.setString(1, category.getName());
-            stmt.execute();
-        }
+    public Category findByName(String name) {
+        return entityManager.find(Category.class, name);
     }
 
-    public void save(Category category) throws SQLException {
-        try (PreparedStatement stmt = connection.prepareStatement(
-                "update categories set name = ? where id = ?;")) {
-            stmt.setString(1, category.getName());
-            stmt.setInt(2, category.getId());
-            stmt.execute();
-        }
+    public Category findById(int id) {
+        return entityManager.find(Category.class, id);
+    }
+    public boolean existById(int id){
+        return entityManager.find(Category.class, id) != null;
     }
 
-    public Category findByName(String name) throws SQLException {
-        try (PreparedStatement stmt = connection.prepareStatement(
-                "select id, name from categories where name = ?")) {
-            stmt.setString(1, name);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new Category(rs.getInt(1), rs.getString(2));
-            }
-        }
-        return new Category(-1, "");
+    public List<Category> getAllCategories() {
+        return entityManager.createQuery("from Category ").getResultList();
     }
 
-    public Category findById(int id) throws SQLException {
-        try (PreparedStatement stmt = connection.prepareStatement(
-                "select id, name from categories where id = ?")) {
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new Category(rs.getInt(1), rs.getString(2));
-            }
-        }
-        return null;
-    }
-
-    public List<Category> getAllCategories() throws SQLException {
-        List<Category> res = new ArrayList<>();
-        try (Statement stmt = connection.createStatement()) {
-            ResultSet rs = stmt.executeQuery("select id, name from categories");
-            while (rs.next()) {
-                res.add(new Category(rs.getInt(1), rs.getString(2)));
-            }
-        }
-        return res;
-    }
-
-    public void deleteCategory(Category category) throws SQLException {
-        try (PreparedStatement stmt = connection.prepareStatement(
-                "delete from categories where id = ?")){
-            stmt.setInt(1, category.getId());
-            stmt.execute();
+    @Transactional
+    public void deleteCategory(Category category) {
+        try {
+            Category attached = findById(category.getId());
+            if (attached != null)
+                entityManager.remove(attached);
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 

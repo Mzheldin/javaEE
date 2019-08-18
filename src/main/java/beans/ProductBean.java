@@ -31,7 +31,7 @@ public class ProductBean implements Serializable {
         productRepository = (ProductRepository) context.getAttribute("productRepository");
     }
 
-    public List<Product> getAllProducts() throws SQLException {
+    public List<Product> getAllProducts() {
         return productRepository.getAllProducts();
     }
 
@@ -45,12 +45,12 @@ public class ProductBean implements Serializable {
         return "/product.xhtml?faces-redirect=true";
     }
 
-    public void deleteProduct(Product product) throws SQLException{
+    public void deleteProduct(Product product) {
         productRepository.deleteProduct(product);
     }
 
-    public String saveProduct() throws SQLException {
-        productRepository.save(this.product);
+    public String saveProduct() {
+        productRepository.merge(this.product);
         return "/products.xhtml?faces-redirect=true";
     }
 

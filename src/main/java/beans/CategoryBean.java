@@ -31,7 +31,7 @@ public class CategoryBean implements Serializable {
         categoryRepository = (CategoryRepository) context.getAttribute("categoryRepository");
     }
 
-    public List<Category> getAllCategories() throws SQLException {
+    public List<Category> getAllCategories() {
         return categoryRepository.getAllCategories();
     }
 
@@ -45,12 +45,12 @@ public class CategoryBean implements Serializable {
         return "/category.xhtml?faces-redirect=true";
     }
 
-    public void deleteCategory(Category category) throws SQLException{
+    public void deleteCategory(Category category) {
         categoryRepository.deleteCategory(category);
     }
 
-    public String saveCategory() throws SQLException {
-        categoryRepository.save(this.category);
+    public String saveCategory() {
+        categoryRepository.merge(this.category);
         return "/categories.xhtml?faces-redirect=true";
     }
 
