@@ -31,7 +31,7 @@ public class OrderBean implements Serializable {
         orderRepository = (OrderRepository) context.getAttribute("orderRepository");
     }
 
-    public List<Order> getAllOrders() throws SQLException {
+    public List<Order> getAllOrders() {
         return orderRepository.getAllOrders();
     }
 
@@ -45,12 +45,12 @@ public class OrderBean implements Serializable {
         return "/order.xhtml?faces-redirect=true";
     }
 
-    public void deleteOrder(Order order) throws SQLException{
+    public void deleteOrder(Order order) {
         orderRepository.deleteOrder(order);
     }
 
-    public String saveOrder() throws SQLException {
-        orderRepository.save(this.order);
+    public String saveOrder() {
+        orderRepository.merge(this.order);
         return "/orders.xhtml?faces-redirect=true";
     }
 

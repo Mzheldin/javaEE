@@ -1,94 +1,54 @@
 package persist;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
-import javax.servlet.ServletContext;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.io.Serializable;
-import java.sql.*;
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 @ApplicationScoped
 @Named
-public class OrderRepository implements Serializable {
+public class OrderRepository {
 
-    @Inject
-    private ServletContext servletContext;
-    private Connection connection;
-
-    @PostConstruct
-    private void init(){
-        this.connection = (Connection) servletContext.getAttribute("db_connection");
-    }
+    @PersistenceContext(unitName = "ds")
+    protected EntityManager entityManager;
 
     public OrderRepository() {
     }
 
-    public OrderRepository(Connection connection) throws SQLException {
-        this.connection = connection;
-        createTableIfNotExists(connection);
+    @Transactional
+    public Order merge(Order order){
+        return entityManager.merge(order);
     }
 
-    public void insert(Order order) throws SQLException {
-        try (PreparedStatement stmt = connection.prepareStatement(
-                "insert into orders(products) values (?);")) {
-            stmt.setString(1, order.getProducts());
-            stmt.execute();
-        }
+    public Order findByProducts(String products) {
+        return entityManager.find(Order.class, products);
     }
 
-    public void save(Order order) throws SQLException {
-        try (PreparedStatement stmt = connection.prepareStatement(
-                "update orders set products = ? where id = ?;")) {
-            stmt.setString(1, order.getProducts());
-            stmt.setInt(2, order.getId());
-            stmt.execute();
-        }
+    public Order findById(int id) {
+        return entityManager.find(Order.class, id);
+    }
+    public boolean existById(int id){
+        return entityManager.find(Order.class, id) != null;
     }
 
-    public Order findByProducts(String products) throws SQLException {
-        try (PreparedStatement stmt = connection.prepareStatement(
-                "select id, number from orders where products = ?")) {
-            stmt.setString(1, products);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new Order(rs.getInt(1), rs.getString(2));
-            }
-        }
-        return new Order(-1, "");
+    public List<Order> getAllOrders() {
+        return entityManager.createQuery("from Order ").getResultList();
     }
 
-    public Order findById(int id) throws SQLException {
-        try (PreparedStatement stmt = connection.prepareStatement(
-                "select id, products from orders where id = ?")) {
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new Order(rs.getInt(1), rs.getString(2));
-            }
-        }
-        return null;
-    }
-
-    public List<Order> getAllOrders() throws SQLException {
-        List<Order> res = new ArrayList<>();
-        try (Statement stmt = connection.createStatement()) {
-            ResultSet rs = stmt.executeQuery("select id, products from orders");
-            while (rs.next()) {
-                res.add(new Order(rs.getInt(1), rs.getString(2)));
-            }
-        }
-        return res;
-    }
-
-    public void deleteOrder(Order order) throws SQLException {
-        try (PreparedStatement stmt = connection.prepareStatement(
-                "delete from orders where id = ?")){
-            stmt.setInt(1, order.getId());
-            stmt.execute();
+    @Transactional
+    public void deleteOrder(Order order) {
+        try {
+            Order attached = findById(order.getId());
+            if (attached != null)
+                entityManager.remove(attached);
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 

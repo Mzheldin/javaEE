@@ -1,8 +1,16 @@
 package persist;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "orders")
 public class Order {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "products", nullable = false)
     private String products;
 
     public Order(int id, String products) {

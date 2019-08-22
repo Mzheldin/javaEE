@@ -1,9 +1,19 @@
 package persist;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "products")
 public class Product {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
+
+    @Column(name = "description")
     private String description;
 
     public Product(int id, String name, String description) {

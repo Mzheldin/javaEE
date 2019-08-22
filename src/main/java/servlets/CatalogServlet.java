@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet(name = "CatalogServlet", urlPatterns = "/catalog")
@@ -31,13 +30,9 @@ public class CatalogServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try {
-            List<Product> products = productRepository.getAllProducts();
-            req.setAttribute("products", products);
-            req.setAttribute("title", "Catalog");
-            req.getRequestDispatcher("WEB-INF/views/catalog.jsp").forward(req, resp);
-        } catch (SQLException e) {
-            throw new ServletException(e);
-        }
+        List<Product> products = productRepository.getAllProducts();
+        req.setAttribute("products", products);
+        req.setAttribute("title", "Catalog");
+        req.getRequestDispatcher("WEB-INF/views/catalog.jsp").forward(req, resp);
     }
 }

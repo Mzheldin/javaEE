@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 
 @WebServlet(name = "ProductServlet", urlPatterns = "/product")
 public class ProductServlet extends HttpServlet {
@@ -28,27 +27,20 @@ public class ProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
-        if (id != null)
-            try {
-                Product product = productRepository.findById(Integer.parseInt(id));
-                req.setAttribute("product", product);
-                req.setAttribute("title", "Product " + product.getName());
-                req.getRequestDispatcher("WEB-INF/views/product.jsp").forward(req, resp);
-            } catch (SQLException e) {
-                throw new ServletException(e);
-            }
+        if (id != null) {
+            Product product = productRepository.findById(Integer.parseInt(id));
+            req.setAttribute("product", product);
+            req.setAttribute("title", "Product " + product.getName());
+            req.getRequestDispatcher("WEB-INF/views/product.jsp").forward(req, resp);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try {
-            Product product = productRepository.findById(Integer.parseInt(req.getParameter("id")));
-            product.setName(req.getParameter("name"));
-            product.setDescription(req.getParameter("description"));
-            productRepository.save(product);
-            resp.sendRedirect(getServletContext().getContextPath() + "/catalog");
-        } catch (SQLException e) {
-            throw new ServletException(e);
-        }
+        Product product = productRepository.findById(Integer.parseInt(req.getParameter("id")));
+        product.setName(req.getParameter("name"));
+        product.setDescription(req.getParameter("description"));
+        productRepository.merge(product);
+        resp.sendRedirect(getServletContext().getContextPath() + "/catalog");
     }
 }
