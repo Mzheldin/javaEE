@@ -1,7 +1,7 @@
-module add \
-    --name=com.mysql.driver \
-    --dependencies=javax.api,javax.transaction.api \
-    --resources=D:\Some_jar_and_other\mysql-connector-java-5.1.48\mysql-connector-java-5.1.48\mysql-connector-java-5.1.48-bin.jar
+# module add \
+#    --name=com.mysql.driver \
+#    --dependencies=javax.api,javax.transaction.api \
+#    --resources=D:\Some_jar_and_other\mysql-connector-java-5.1.48\mysql-connector-java-5.1.48\mysql-connector-java-5.1.48-bin.jar
 
 /subsystem=datasources/jdbc-driver=mysql:add( driver-name=mysql, driver-module-name=com.mysql.driver, driver-class-name=com.mysql.jdbc.Driver )
 

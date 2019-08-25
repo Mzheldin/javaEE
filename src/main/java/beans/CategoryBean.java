@@ -1,24 +1,26 @@
 package beans;
 
+import interceptors.LogInterceptor;
 import persist.Category;
 import persist.CategoryRepository;
+import services.CategoryService;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
-import javax.faces.bean.ManagedBean;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-import javax.inject.Named;
+import javax.interceptor.Interceptors;
 import javax.servlet.ServletContext;
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.List;
 
-@SessionScoped
-@Named
-public class CategoryBean implements Serializable {
+@Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
+public class CategoryBean implements Serializable, CategoryService {
 
-    @Inject
+    @EJB
     private CategoryRepository categoryRepository;
     private Category category;
 
@@ -31,27 +33,59 @@ public class CategoryBean implements Serializable {
         categoryRepository = (CategoryRepository) context.getAttribute("categoryRepository");
     }
 
+    @Override
+    @Interceptors({LogInterceptor.class})
     public List<Category> getAllCategories() {
         return categoryRepository.getAllCategories();
     }
 
+    @Override
+    @Interceptors({LogInterceptor.class})
     public String createCategory() {
         this.category = new Category();
         return "/category.xhtml?faces-redirect=true";
     }
 
+    @Override
+    @Interceptors({LogInterceptor.class})
     public String editCategory(Category category) {
         this.category = category;
         return "/category.xhtml?faces-redirect=true";
     }
 
+    @Override
+    @Interceptors({LogInterceptor.class})
     public void deleteCategory(Category category) {
         categoryRepository.deleteCategory(category);
     }
 
+    @Override
+    @Interceptors({LogInterceptor.class})
     public String saveCategory() {
         categoryRepository.merge(this.category);
         return "/categories.xhtml?faces-redirect=true";
+    }
+
+    @Override
+    public Category findByName(String name) {
+        return categoryRepository.findByName(name);
+    }
+
+    @Override
+    @Interceptors({LogInterceptor.class})
+    public Category findById(int id) {
+        return categoryRepository.findById(id);
+    }
+
+    @Override
+    public boolean existById(int id) {
+        return categoryRepository.existById(id);
+    }
+
+    @Override
+    @Interceptors({LogInterceptor.class})
+    public boolean existByName(String name) {
+        return categoryRepository.existByName(name);
     }
 
     public Category getCategory() {

@@ -23,8 +23,8 @@
                 </h:column>
                 <h:column>
                     <f:facet name="header">Action</f:facet>
-                    <h:commandButton value="Edit" action="#{orderBean.editOrder(product)}" styleClass="mr-1"/>
-                    <h:commandButton value="Delete" action="#{orderBean.deleteOrder(product)}" styleClass="mr-1">
+                    <h:commandButton value="Edit" action="#{orderBean.editOrder(order)}" styleClass="mr-1"/>
+                    <h:commandButton value="Delete" action="#{orderBean.deleteOrder(order)}" styleClass="mr-1">
                         <f:ajax render="orderForm"/>
                     </h:commandButton>
                 </h:column>
