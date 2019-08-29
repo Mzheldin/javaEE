@@ -1,7 +1,8 @@
 package persist;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
@@ -11,9 +12,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-@Named
-@ApplicationScoped
-public class ProductRepository {
+@Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
+public class ProductRepository implements Serializable{
 
     @PersistenceContext(unitName = "ds")
     protected EntityManager entityManager;
@@ -26,20 +27,36 @@ public class ProductRepository {
         return entityManager.merge(product);
     }
 
+    @Transactional
     public Product findByName(String name) {
         return entityManager.find(Product.class, name);
     }
 
+    @Transactional
     public Product findById(int id) {
         return entityManager.find(Product.class, id);
     }
 
+    @Transactional
+    public List<Product> getProductsByCategory(Category category){
+        return entityManager.createQuery("select distinct p from Product p left join fetch p.category where p.category = :category ", Product.class)
+                .setParameter("category", category)
+                .getResultList();
+    }
+
+    @Transactional
     public boolean existById(int id){
         return entityManager.find(Product.class, id) != null;
     }
 
+    @Transactional
+    public boolean existByName(String name){
+        return entityManager.find(Product.class, name) != null;
+    }
+
+    @Transactional
     public List<Product> getAllProducts() {
-        return entityManager.createQuery("from Product ").getResultList();
+        return entityManager.createQuery("select distinct p from Product p left join fetch p.category", Product.class).getResultList();
     }
 
     @Transactional

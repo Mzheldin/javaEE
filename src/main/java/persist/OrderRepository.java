@@ -1,7 +1,8 @@
 package persist;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
@@ -11,9 +12,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-@ApplicationScoped
-@Named
-public class OrderRepository {
+@Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
+public class OrderRepository implements Serializable{
 
     @PersistenceContext(unitName = "ds")
     protected EntityManager entityManager;
@@ -26,19 +27,24 @@ public class OrderRepository {
         return entityManager.merge(order);
     }
 
+    @Transactional
     public Order findByProducts(String products) {
         return entityManager.find(Order.class, products);
     }
 
+    @Transactional
     public Order findById(int id) {
         return entityManager.find(Order.class, id);
     }
+
+    @Transactional
     public boolean existById(int id){
         return entityManager.find(Order.class, id) != null;
     }
 
+    @Transactional
     public List<Order> getAllOrders() {
-        return entityManager.createQuery("from Order ").getResultList();
+        return entityManager.createQuery("from Order ", Order.class).getResultList();
     }
 
     @Transactional

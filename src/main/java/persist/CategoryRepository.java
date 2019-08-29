@@ -1,7 +1,8 @@
 package persist;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
@@ -11,9 +12,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-@Named
-@ApplicationScoped
-public class CategoryRepository {
+@Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
+public class CategoryRepository implements Serializable{
 
     @PersistenceContext(unitName = "ds")
     protected EntityManager entityManager;
@@ -26,19 +27,29 @@ public class CategoryRepository {
         return entityManager.merge(category);
     }
 
+    @Transactional
     public Category findByName(String name) {
         return entityManager.find(Category.class, name);
     }
 
+    @Transactional
     public Category findById(int id) {
         return entityManager.find(Category.class, id);
     }
+
+    @Transactional
     public boolean existById(int id){
         return entityManager.find(Category.class, id) != null;
     }
 
+    @Transactional
+    public boolean existByName(String name){
+        return entityManager.find(Category.class, name) != null;
+    }
+
+    @Transactional
     public List<Category> getAllCategories() {
-        return entityManager.createQuery("from Category ").getResultList();
+        return entityManager.createQuery("select distinct c from Category c left join fetch c.products", Category.class).getResultList();
     }
 
     @Transactional
