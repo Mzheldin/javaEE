@@ -2,8 +2,10 @@ package beans;
 
 import interceptors.LogInterceptor;
 import persist.Category;
+import persist.CategoryRepository;
 import persist.Product;
 import persist.ProductRepository;
+import services.rest.ProductServiceRest;
 import services.ProductService;
 
 import javax.annotation.PostConstruct;
@@ -14,15 +16,18 @@ import javax.ejb.TransactionManagementType;
 import javax.faces.context.FacesContext;
 import javax.interceptor.Interceptors;
 import javax.servlet.ServletContext;
+import javax.ws.rs.core.Response;
 import java.io.Serializable;
 import java.util.List;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class ProductBean implements Serializable, ProductService {
+public class ProductBean implements Serializable, ProductService, ProductServiceRest {
 
     @EJB
     private ProductRepository productRepository;
+    @EJB
+    private CategoryRepository categoryRepository;
     private Product product;
 
     public ProductBean() {
@@ -95,6 +100,33 @@ public class ProductBean implements Serializable, ProductService {
     public String saveProduct() {
         productRepository.merge(this.product);
         return "/products.xhtml?faces-redirect=true";
+    }
+
+    @Override
+    @Interceptors({LogInterceptor.class})
+    public List<Product> getProductsByCategory(int id) {
+        if (categoryRepository.existById(id))
+            return productRepository.getProductsByCategory(categoryRepository.findById(id));
+        return null;
+    }
+
+    @Override
+    @Interceptors({LogInterceptor.class})
+    public Response deleteProduct(int id) {
+        Product product = productRepository.findById(id);
+        if (product != null){
+            productRepository.deleteProduct(product);
+            return Response.accepted().build();
+        }
+        return Response.notModified().build();
+    }
+
+    @Override
+    @Interceptors({LogInterceptor.class})
+    public Response addProduct(Product product) {
+        productRepository.merge(product);
+        return Response.accepted().build();
+
     }
 
     public Product getProduct() {

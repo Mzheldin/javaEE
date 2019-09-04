@@ -3,6 +3,7 @@ package beans;
 import interceptors.LogInterceptor;
 import persist.Category;
 import persist.CategoryRepository;
+import services.rest.CategoryServiceRest;
 import services.CategoryService;
 
 import javax.annotation.PostConstruct;
@@ -13,12 +14,13 @@ import javax.ejb.TransactionManagementType;
 import javax.faces.context.FacesContext;
 import javax.interceptor.Interceptors;
 import javax.servlet.ServletContext;
+import javax.ws.rs.core.Response;
 import java.io.Serializable;
 import java.util.List;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class CategoryBean implements Serializable, CategoryService {
+public class CategoryBean implements Serializable, CategoryService, CategoryServiceRest {
 
     @EJB
     private CategoryRepository categoryRepository;
@@ -86,6 +88,13 @@ public class CategoryBean implements Serializable, CategoryService {
     @Interceptors({LogInterceptor.class})
     public boolean existByName(String name) {
         return categoryRepository.existByName(name);
+    }
+
+    @Override
+    @Interceptors({LogInterceptor.class})
+    public Response addCategory(Category category) {
+        categoryRepository.merge(category);
+        return Response.accepted().build();
     }
 
     public Category getCategory() {
