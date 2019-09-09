@@ -19,4 +19,32 @@
     <servlet-name>faces-servlet</servlet-name>
     <url-pattern>/*.xhtml</url-pattern>
   </servlet-mapping>
+
+  <login-config>
+    <auth-method>FORM</auth-method>
+    <realm-name>RealmUsersRoles</realm-name>
+    <form-login-config>
+      <form-login-page>/login.xhtml</form-login-page>
+      <form-error-page>/error.xhtml</form-error-page>
+    </form-login-config>
+  </login-config>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Product resource</web-resource-name>
+      <url-pattern>/product/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>CLIENT, MANAGER, ADMIN</role-name>
+    </auth-constraint>
+  </security-constraint>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Category resource</web-resource-name>
+      <url-pattern>/category/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>ADMIN, MANAGER</role-name>
+    </auth-constraint>
+  </security-constraint>
 </web-app>
